@@ -7,7 +7,7 @@ namespace Test
 {
     class Labyrinth
     {
-        static void Main(string[] args)
+        void Main(string[] args)
         {
             string path = @"C:\Users\viksu\source\repos\App\Test\lab.txt";
 
