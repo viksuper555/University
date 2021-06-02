@@ -45,7 +45,7 @@ namespace MusicProjectForms
             dataGridViewDetails.ForeColor = Color.FromArgb(10, 146, 234);
 
 
-            var paths = Directory.GetFiles(@"C:\Users\viksu\Desktop\MusicProjectForms\Resources\Images");
+            var paths = Directory.GetFiles(@"C:\Users\Viktor\source\repos\viksuper555\University\MusicProject\MusicProjectForms\Resources\Images");
             foreach(var path in paths)
             {
                 var fileName = Path.GetFileNameWithoutExtension(path);
