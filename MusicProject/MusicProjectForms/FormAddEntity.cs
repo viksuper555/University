@@ -11,12 +11,12 @@ namespace MusicProjectForms
 {
     public partial class FormAddEntity : Form
     {
-        object entity = new object();
+        public object Entity = new object();
         public FormAddEntity(string fullTypeName)
         {
             Type type = Type.GetType(fullTypeName);
             if (type != null)
-                entity =  Activator.CreateInstance(type);
+                Entity =  Activator.CreateInstance(type);
             else
             {
                 foreach (var asm in AppDomain.CurrentDomain.GetAssemblies())
@@ -24,39 +24,52 @@ namespace MusicProjectForms
                     type = asm.GetType(fullTypeName);
                     if (type != null)
                     {
-                        entity = Activator.CreateInstance(type);
+                        Entity = Activator.CreateInstance(type);
                         break;
                     }
                 }
             }
 
             int i = 0;
-            foreach(var property in entity.GetType().GetProperties())
+            foreach(var propInfo in Entity.GetType().GetProperties())
             {
-                if (!property.PropertyType.IsPrimitive && property.PropertyType != typeof(string))
+                if (!propInfo.PropertyType.IsPrimitive && propInfo.PropertyType != typeof(string))
                     continue;
 
                 Label label = new Label
                 {
-                    Text = property.Name,
+                    Text = propInfo.Name,
                     Top = 25 * i + 75,
                     Left = 15,
                     Width = 80,
                     ForeColor = Main.BlueColor
                 };
 
-                TextBox textBox = new TextBox()
-                {
-                    Top = 25 * i++ + 75,
-                    Left = 100,
-                    ForeColor = Main.DarkColor,
-                    BorderStyle = BorderStyle.None,
-                    Tag = property.Name
-                };
-                
+                Control control = new Control();
+                if (propInfo.PropertyType == typeof(string))
+                    control = new TextBox()
+                    {
+                        Name = propInfo.Name,
+                        Top = 25 * i++ + 75,
+                        Width = 100,
+                        Left = 100,
+                        ForeColor = Main.DarkColor,
+                        BorderStyle = BorderStyle.None
+                    };
+                else if (propInfo.PropertyType == typeof(int) || propInfo.PropertyType == typeof(double))
+                    control = new NumericUpDown()
+                    {
+                        Name = propInfo.Name,
+                        Top = 25 * i++ + 75,
+                        Width = 100,
+                        Maximum = 9999,
+                        Left = 100,
+                        ForeColor = Main.DarkColor,
+                        BorderStyle = BorderStyle.None
+                    };
 
                 this.Controls.Add(label);
-                this.Controls.Add(textBox);
+                this.Controls.Add(control);
             }
             
             InitializeComponent();
@@ -89,6 +102,13 @@ namespace MusicProjectForms
 
         private void buttonAdd_Click(object sender, EventArgs e)
         {
+            foreach (var propInfo in Entity.GetType().GetProperties())
+            {
+                if (!propInfo.PropertyType.IsPrimitive && propInfo.PropertyType != typeof(string))
+                    continue;
+                Type type = propInfo.PropertyType;
+                propInfo.SetValue(Entity, Convert.ChangeType(Controls.Find(propInfo.Name, true)[0].Text,propInfo.PropertyType));
+            }
             DialogResult = DialogResult.OK;
             Close();
         }

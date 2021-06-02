@@ -163,11 +163,10 @@ namespace MusicProjectForms
         private void listViewMain_SelectedIndexChanged(object sender, EventArgs e)
         {
             var listView = sender as ListView;
-            if (listView.SelectedItems.Count <= 0)
+            if (listView.SelectedItems.Count == 0)
                 return;
             var item = listView.SelectedItems[0].Tag;
-            //var a = song.GetType().Name;
-            
+
             dataGridViewDetails.DataSource = new List<object>() { item };
 
             //Ideally we want 200 Column width. If too many columns, we lower that value.
@@ -248,6 +247,7 @@ namespace MusicProjectForms
                     }
                     break;
             }
+
         }
 
         private void buttonEdit_Click(object sender, EventArgs e)
@@ -260,6 +260,32 @@ namespace MusicProjectForms
             var fp = new FormAddEntity(listViewMain.Items[0]?.Tag.GetType().FullName);
 
             fp.ShowDialog();
+
+            if(fp.DialogResult == DialogResult.OK)
+            {
+                var entity = fp.Entity;
+                switch(entity.GetType().Name)
+                {
+                    case "Artist":
+                        artists.Add((Artist)entity);
+                        UpdateListViewMain(artists);
+                        break;
+                    case "Group":
+                        groups.Add((Group)entity);
+                        UpdateListViewMain(groups);
+                        break;
+                    case "Album":
+                        albums.Add((Album)entity);
+                        UpdateListViewMain(albums);
+                        break;
+                    case "Song":
+                        songs.Add((Song)entity);
+                        UpdateListViewMain(songs);
+                        break;
+                }
+
+            }
+            Validate();
         }
     }
 }
