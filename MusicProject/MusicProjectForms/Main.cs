@@ -254,7 +254,53 @@ namespace MusicProjectForms
 
         private void buttonEdit_Click(object sender, EventArgs e)
         {
+            if (listViewMain.SelectedItems.Count == 0) return;
+            var entity = listViewMain.SelectedItems[0].Tag;
+            var fp = new FormEditEntity(entity);
 
+            fp.ShowDialog();
+
+            if (fp.DialogResult == DialogResult.OK)
+            {
+                var newEntity = fp.Entity;
+                switch (entity.GetType().Name)
+                {
+                    case "Artist":
+                        for (int i = 0; i < artists.Count; i++)
+                        {
+                            if (artists[i].Name == ((Artist)entity).Name)
+                                artists[i] = (Artist)newEntity;
+                        }
+                        UpdateListViewMain(artists);
+                        break;
+                    case "Group":
+                        for (int i = 0; i < groups.Count; i++)
+                        {
+                            if (groups[i].Name == ((Group)entity).Name)
+                                groups[i] = (Group)newEntity;
+                        }
+                        UpdateListViewMain(groups);
+                        break;
+                    case "Album":
+                        for (int i = 0; i < albums.Count; i++)
+                        {
+                            if (albums[i].Name == ((Album)entity).Name)
+                                albums[i] = (Album)newEntity;
+                        }
+                        UpdateListViewMain(albums);
+                        break;
+                    case "Song":
+                        for (int i = 0; i < songs.Count; i++)
+                        {
+                            if (songs[i].Name == ((Song)entity).Name)
+                                songs[i] = (Song)newEntity;
+                        }
+                        UpdateListViewMain(songs);
+                        break;
+                }
+
+            }
+            Validate();
         }
 
         private void Add_Click(object sender, EventArgs e)
