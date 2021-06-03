@@ -57,11 +57,11 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Drawing.Common" name="System.Drawing.Common, Version=4.0.2.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51" />
-  <data name="buttonAdd.Image" type="System.Drawing.Bitmap, System.Drawing.Common" mimetype="application/x-microsoft.net.object.bytearray.base64">
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="buttonAdd.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABkAAAAZCAYAAADE6YVjAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
-        vwAADr8BOAVTJAAAAExJREFUSEtjIAXwTzvxH4ahQtQFyBbQzKJRS0gCo5aQBIaGJdgMoBamuQUwPIws
+        vQAADr0BR/uQrQAAAExJREFUSEtjIAXwTzvxH4ahQtQFyBbQzKJRS0gCo5aQBIaGJdgMoBamuQUwPIws
         oXWQgS0gFlBsADFg1BKSwKglJIHhYwkIkGcBAwMAKkMNq9Vq51gAAAAASUVORK5CYII=
 </value>
   </data>

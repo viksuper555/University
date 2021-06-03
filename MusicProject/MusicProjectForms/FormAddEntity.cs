@@ -54,7 +54,8 @@ namespace MusicProjectForms
                         Width = 100,
                         Left = 100,
                         ForeColor = Main.DarkColor,
-                        BorderStyle = BorderStyle.None
+                        BorderStyle = BorderStyle.None,
+                        TabIndex = 1
                     };
                 else if (propInfo.PropertyType == typeof(int) || propInfo.PropertyType == typeof(double))
                     control = new NumericUpDown()
@@ -65,7 +66,8 @@ namespace MusicProjectForms
                         Maximum = 9999,
                         Left = 100,
                         ForeColor = Main.DarkColor,
-                        BorderStyle = BorderStyle.None
+                        BorderStyle = BorderStyle.None,
+                        TabIndex = 1
                     };
 
                 this.Controls.Add(label);

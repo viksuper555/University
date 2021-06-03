@@ -5,10 +5,12 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Media;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using MusicProject;
+using NAudio.Wave;
 
 namespace MusicProjectForms
 {
@@ -21,10 +23,12 @@ namespace MusicProjectForms
         List<Group> groups = new List<Group>();
         List<Song> songs = new List<Song>();
         ImageList imageList = new ImageList();
-
+        private WaveOutEvent outputDevice;
+        private AudioFileReader audioFile;
         public Main()
         {
             InitializeComponent();
+            #region Design stuff
             imageList.ImageSize = new Size(100, 100);
             dataGridViewDetails.ColumnHeadersDefaultCellStyle.BackColor = DarkColor;
             dataGridViewDetails.ColumnHeadersDefaultCellStyle.ForeColor = BlueColor;
@@ -35,18 +39,13 @@ namespace MusicProjectForms
             dataGridViewDetails.DefaultCellStyle.BackColor = Color.FromArgb(34, 34, 34);
             dataGridViewDetails.BackColor = Color.FromArgb(34, 34, 34);
             dataGridViewDetails.RowTemplate.Height = 80;
-
-            //for (int i = 0; i < dataGridViewDetails.Rows[0].Cells.Count; i++)
-            //{
-            //    dataGridViewDetails.Rows[0].Cells[i].Style.BackColor = Color.FromArgb(34, 34, 34);
-            //}
-
-
             dataGridViewDetails.ForeColor = Color.FromArgb(10, 146, 234);
+            #endregion
 
+            this.FormClosing += OnButtonStopClick;
 
             var paths = Directory.GetFiles(@"C:\Users\Viktor\source\repos\viksuper555\University\MusicProject\MusicProjectForms\Resources\Images");
-            foreach(var path in paths)
+            foreach (var path in paths)
             {
                 var fileName = Path.GetFileNameWithoutExtension(path);
                 imageList.Images.Add(fileName, Image.FromFile(path));
@@ -54,32 +53,33 @@ namespace MusicProjectForms
             }
 
 
-            var ivan = new Artist() { Name = "J Cole", Age = 40, Nationality = "Bulgarian", BirthName = "Ivan Petrovich" };
-            var ivan2 = new Artist() { Name = "Vankata2", Age = 15, Nationality = "Bulgarian", BirthName = "Ivan Petrovich" };
+            var jCole = new Artist() { Name = "J Cole", Age = 40, Nationality = "USA", BirthName = "Jermaine Cole" };
+            var kyle = new Artist() { Name = "Kyle", Age = 28, Nationality = "USA", BirthName = "Kyle Harvey" };
 
-            var gorillaz = new Group() { Name = "Gorillaz", Artists = new List<Artist>() { ivan }, };
-            var gorillaz2 = new Group() { Name = "Gorillaz", Artists = new List<Artist>() { ivan2 }, };
+            var gorillaz = new Group() { Name = "Gorillaz", Artists = new List<Artist>() { jCole }, };
+            var gorillaz2 = new Group() { Name = "Gorillaz", Artists = new List<Artist>() { kyle }, };
 
 
-            var album = new Album() { Name = "album1", Year = 2021, Artists = new List<Artist>() { ivan } };
-            var album2 = new Album() { Name = "Demon Days", Year = 2021, Artists = new List<Artist>() { ivan2 } };
+            var album = new Album() { Name = "SAD!", Year = 2019, Artists = new List<Artist>() { jCole } };
+            var album2 = new Album() { Name = "Demon Days", Year = 2021, Artists = new List<Artist>() { kyle } };
 
-            var song = new Song() { Name = "pesen za dushata", Year = 1990, Genre = "Folk", Artists = new List<Artist>() { ivan }, Album = album };
-            var song2 = new Song() { Name = "pesen za dushata2", Year = 1990, Genre = "Folk", Artists = new List<Artist>() { ivan2 }, Album = album2 };
+            var song = new Song() { Name = "pesen za dushata", Year = 1990, Genre = "Folk", Artists = new List<Artist>() { jCole }, Album = album };
+            var song2 = new Song() { Name = "pesen za dushata2", Year = 1990, Genre = "Folk", Artists = new List<Artist>() { kyle }, Album = album2 };
 
             album.AddSong(song);
             album2.AddSong(song2);
-            ivan.AddAlbum(album);
-            ivan2.AddAlbum(album2);
+            jCole.AddAlbum(album);
+            kyle.AddAlbum(album2);
 
-            artists.Add(ivan);
-            artists.Add(ivan2);
-            artists.Add(ivan2);
-            artists.Add(ivan2);
-            artists.Add(ivan2);
-            artists.Add(ivan2); artists.Add(ivan2);
-            artists.Add(ivan2);
-            artists.Add(ivan2);
+            artists.Add(jCole);
+            artists.Add(kyle);
+            artists.Add(kyle);
+            artists.Add(kyle);
+            artists.Add(kyle);
+            artists.Add(kyle);
+            artists.Add(kyle);
+            artists.Add(kyle);
+            artists.Add(kyle);
             groups.Add(gorillaz);
             groups.Add(gorillaz2);
             albums.Add(album);
@@ -181,11 +181,13 @@ namespace MusicProjectForms
         private void UpdateListViewMain<T>(T list)
         {
             listViewMain.Items.Clear();
-            
+
+            panelAudioControls.Visible = ((IEnumerable<object>)list).FirstOrDefault().GetType() == typeof(Song);            
+
             foreach (var entity in list as IEnumerable<object>)
             {
                 listViewMain.Items.Add(new ListViewItem
-                { 
+                {
                     Text = entity.ToString(),
                     Tag = entity,
                     ImageKey = entity.ToString()
@@ -200,10 +202,10 @@ namespace MusicProjectForms
             var a = dataGridViewDetails.Rows[0]?.DataBoundItem;
             if (a == null)
                 return;
-            switch (a.GetType().Name) 
+            switch (a.GetType().Name)
             {
                 case "Artist":
-                    for (int i = artists.Count-1; i >= 0; i--)
+                    for (int i = artists.Count - 1; i >= 0; i--)
                     {
                         if (artists[i].Name == (a as Artist).Name)
                         {
@@ -261,10 +263,10 @@ namespace MusicProjectForms
 
             fp.ShowDialog();
 
-            if(fp.DialogResult == DialogResult.OK)
+            if (fp.DialogResult == DialogResult.OK)
             {
                 var entity = fp.Entity;
-                switch(entity.GetType().Name)
+                switch (entity.GetType().Name)
                 {
                     case "Artist":
                         artists.Add((Artist)entity);
@@ -286,6 +288,49 @@ namespace MusicProjectForms
 
             }
             Validate();
+        }
+
+        private void OnButtonPlayClick(object sender, EventArgs e)
+        {
+            if (outputDevice == null)
+            {
+                outputDevice = new WaveOutEvent();
+                outputDevice.PlaybackStopped += OnPlaybackStopped;
+            }
+            if (audioFile == null)
+            {
+                audioFile = new AudioFileReader(@"C:\Users\Viktor\source\repos\viksuper555\University\MusicProject\MusicProjectForms\Resources\Sounds\SAD!.mp3");
+                outputDevice.Init(audioFile);
+            }
+            outputDevice.Play();
+        }
+        private void OnPlaybackStopped(object sender, StoppedEventArgs args)
+        {
+            outputDevice.Dispose();
+            outputDevice = null;
+            audioFile.Dispose();
+            audioFile = null;
+        }
+
+        private void OnButtonStopClick(object sender, EventArgs e)
+        {
+            outputDevice?.Stop();
+        }
+
+        private void buttonSkip_Click(object sender, EventArgs e)
+        {
+            if (audioFile != null)
+                audioFile.CurrentTime = audioFile.CurrentTime.Add(TimeSpan.FromSeconds(10));
+        }
+        private void buttonLeft_Click(object sender, EventArgs e)
+        {
+            if (audioFile != null)
+                audioFile.CurrentTime = audioFile.CurrentTime.Subtract(TimeSpan.FromSeconds(10));
+        }
+        private void trackBarVolume_Scroll(object sender, EventArgs e)
+        {
+            if (audioFile != null)
+                audioFile.Volume = trackBarVolume.Value / 100f;
         }
     }
 }

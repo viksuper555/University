@@ -29,4 +29,8 @@
     <Folder Include="Resources\Images\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="NAudio" Version="2.0.0" />
+  </ItemGroup>
+
 </Project>

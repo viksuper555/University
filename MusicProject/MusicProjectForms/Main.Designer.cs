@@ -31,8 +31,8 @@ namespace MusicProjectForms
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panelLeft = new System.Windows.Forms.Panel();
             this.panelButtonSelection = new System.Windows.Forms.Panel();
             this.buttonAlbums = new System.Windows.Forms.Button();
@@ -51,6 +51,12 @@ namespace MusicProjectForms
             this.dataGridViewDetails = new System.Windows.Forms.DataGridView();
             this.panelBot = new System.Windows.Forms.Panel();
             this.panelManipulateButtons = new System.Windows.Forms.Panel();
+            this.panelAudioControls = new System.Windows.Forms.Panel();
+            this.buttonSkip = new System.Windows.Forms.Button();
+            this.buttonStop = new System.Windows.Forms.Button();
+            this.buttonPlay = new System.Windows.Forms.Button();
+            this.buttonLeft = new System.Windows.Forms.Button();
+            this.trackBarVolume = new System.Windows.Forms.TrackBar();
             this.Add = new System.Windows.Forms.Button();
             this.buttonEdit = new System.Windows.Forms.Button();
             this.buttonDelete = new System.Windows.Forms.Button();
@@ -61,6 +67,8 @@ namespace MusicProjectForms
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewDetails)).BeginInit();
             this.panelBot.SuspendLayout();
             this.panelManipulateButtons.SuspendLayout();
+            this.panelAudioControls.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarVolume)).BeginInit();
             this.SuspendLayout();
             // 
             // panelLeft
@@ -298,24 +306,24 @@ namespace MusicProjectForms
             // 
             this.dataGridViewDetails.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(34)))), ((int)(((byte)(34)))));
             this.dataGridViewDetails.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle5.Font = new System.Drawing.Font("Verdana", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(34)))), ((int)(((byte)(34)))));
-            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridViewDetails.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Verdana", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(34)))), ((int)(((byte)(34)))));
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewDetails.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridViewDetails.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewDetails.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewDetails.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(34)))), ((int)(((byte)(34)))));
             this.dataGridViewDetails.Location = new System.Drawing.Point(10, 10);
             this.dataGridViewDetails.Name = "dataGridViewDetails";
             this.dataGridViewDetails.RowHeadersVisible = false;
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(34)))), ((int)(((byte)(34)))));
-            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.Color.White;
-            this.dataGridViewDetails.RowsDefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(34)))), ((int)(((byte)(34)))));
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.White;
+            this.dataGridViewDetails.RowsDefaultCellStyle = dataGridViewCellStyle2;
             this.dataGridViewDetails.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Verdana", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.dataGridViewDetails.RowTemplate.Height = 25;
             this.dataGridViewDetails.Size = new System.Drawing.Size(829, 190);
@@ -340,6 +348,7 @@ namespace MusicProjectForms
             // 
             // panelManipulateButtons
             // 
+            this.panelManipulateButtons.Controls.Add(this.panelAudioControls);
             this.panelManipulateButtons.Controls.Add(this.Add);
             this.panelManipulateButtons.Controls.Add(this.buttonEdit);
             this.panelManipulateButtons.Controls.Add(this.buttonDelete);
@@ -348,6 +357,101 @@ namespace MusicProjectForms
             this.panelManipulateButtons.Name = "panelManipulateButtons";
             this.panelManipulateButtons.Size = new System.Drawing.Size(829, 26);
             this.panelManipulateButtons.TabIndex = 2;
+            // 
+            // panelAudioControls
+            // 
+            this.panelAudioControls.Controls.Add(this.buttonSkip);
+            this.panelAudioControls.Controls.Add(this.buttonStop);
+            this.panelAudioControls.Controls.Add(this.buttonPlay);
+            this.panelAudioControls.Controls.Add(this.buttonLeft);
+            this.panelAudioControls.Controls.Add(this.trackBarVolume);
+            this.panelAudioControls.Dock = System.Windows.Forms.DockStyle.Left;
+            this.panelAudioControls.Location = new System.Drawing.Point(0, 0);
+            this.panelAudioControls.Name = "panelAudioControls";
+            this.panelAudioControls.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
+            this.panelAudioControls.Size = new System.Drawing.Size(408, 26);
+            this.panelAudioControls.TabIndex = 10;
+            // 
+            // buttonSkip
+            // 
+            this.buttonSkip.AutoSize = true;
+            this.buttonSkip.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(34)))), ((int)(((byte)(34)))));
+            this.buttonSkip.Dock = System.Windows.Forms.DockStyle.Left;
+            this.buttonSkip.FlatAppearance.BorderSize = 0;
+            this.buttonSkip.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonSkip.Image = global::MusicProjectForms.Properties.Resources.next;
+            this.buttonSkip.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.buttonSkip.Location = new System.Drawing.Point(225, 0);
+            this.buttonSkip.Name = "buttonSkip";
+            this.buttonSkip.Size = new System.Drawing.Size(35, 26);
+            this.buttonSkip.TabIndex = 8;
+            this.buttonSkip.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.buttonSkip.UseVisualStyleBackColor = false;
+            this.buttonSkip.Click += new System.EventHandler(this.buttonSkip_Click);
+            // 
+            // buttonStop
+            // 
+            this.buttonStop.AutoSize = true;
+            this.buttonStop.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(34)))), ((int)(((byte)(34)))));
+            this.buttonStop.Dock = System.Windows.Forms.DockStyle.Left;
+            this.buttonStop.FlatAppearance.BorderSize = 0;
+            this.buttonStop.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonStop.Image = global::MusicProjectForms.Properties.Resources.pause;
+            this.buttonStop.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.buttonStop.Location = new System.Drawing.Point(190, 0);
+            this.buttonStop.Name = "buttonStop";
+            this.buttonStop.Size = new System.Drawing.Size(35, 26);
+            this.buttonStop.TabIndex = 9;
+            this.buttonStop.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.buttonStop.UseVisualStyleBackColor = false;
+            this.buttonStop.Click += new System.EventHandler(this.OnButtonStopClick);
+            // 
+            // buttonPlay
+            // 
+            this.buttonPlay.AutoSize = true;
+            this.buttonPlay.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(34)))), ((int)(((byte)(34)))));
+            this.buttonPlay.Dock = System.Windows.Forms.DockStyle.Left;
+            this.buttonPlay.FlatAppearance.BorderSize = 0;
+            this.buttonPlay.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonPlay.Image = global::MusicProjectForms.Properties.Resources.play;
+            this.buttonPlay.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.buttonPlay.Location = new System.Drawing.Point(155, 0);
+            this.buttonPlay.Name = "buttonPlay";
+            this.buttonPlay.Size = new System.Drawing.Size(35, 26);
+            this.buttonPlay.TabIndex = 4;
+            this.buttonPlay.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.buttonPlay.UseVisualStyleBackColor = false;
+            this.buttonPlay.Click += new System.EventHandler(this.OnButtonPlayClick);
+            // 
+            // buttonLeft
+            // 
+            this.buttonLeft.AutoSize = true;
+            this.buttonLeft.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(34)))), ((int)(((byte)(34)))));
+            this.buttonLeft.Dock = System.Windows.Forms.DockStyle.Left;
+            this.buttonLeft.FlatAppearance.BorderSize = 0;
+            this.buttonLeft.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonLeft.Image = global::MusicProjectForms.Properties.Resources.rewind;
+            this.buttonLeft.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.buttonLeft.Location = new System.Drawing.Point(120, 0);
+            this.buttonLeft.Name = "buttonLeft";
+            this.buttonLeft.Size = new System.Drawing.Size(35, 26);
+            this.buttonLeft.TabIndex = 7;
+            this.buttonLeft.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.buttonLeft.UseVisualStyleBackColor = false;
+            this.buttonLeft.Click += new System.EventHandler(this.buttonLeft_Click);
+            // 
+            // trackBarVolume
+            // 
+            this.trackBarVolume.Dock = System.Windows.Forms.DockStyle.Left;
+            this.trackBarVolume.Location = new System.Drawing.Point(20, 0);
+            this.trackBarVolume.Maximum = 100;
+            this.trackBarVolume.Name = "trackBarVolume";
+            this.trackBarVolume.Size = new System.Drawing.Size(100, 26);
+            this.trackBarVolume.TabIndex = 6;
+            this.trackBarVolume.TickFrequency = 10;
+            this.trackBarVolume.TickStyle = System.Windows.Forms.TickStyle.Both;
+            this.trackBarVolume.Value = 100;
+            this.trackBarVolume.Scroll += new System.EventHandler(this.trackBarVolume_Scroll);
             // 
             // Add
             // 
@@ -430,6 +534,9 @@ namespace MusicProjectForms
             this.panelBot.ResumeLayout(false);
             this.panelManipulateButtons.ResumeLayout(false);
             this.panelManipulateButtons.PerformLayout();
+            this.panelAudioControls.ResumeLayout(false);
+            this.panelAudioControls.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarVolume)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -457,6 +564,12 @@ namespace MusicProjectForms
         private System.Windows.Forms.Button buttonEdit;
         private System.Windows.Forms.Button buttonDelete;
         private System.Windows.Forms.Button Add;
+        private System.Windows.Forms.Button buttonPlay;
+        private System.Windows.Forms.TrackBar trackBarVolume;
+        private System.Windows.Forms.Button buttonLeft;
+        private System.Windows.Forms.Button buttonSkip;
+        private System.Windows.Forms.Button buttonStop;
+        private System.Windows.Forms.Panel panelAudioControls;
     }
 }
 
