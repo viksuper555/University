@@ -45,7 +45,7 @@ namespace MusicProjectForms
 
             this.FormClosing += OnButtonStopClick;
 
-            var paths = Directory.GetFiles(@"C:\Users\viksu\Source\Repos\viksuper555\University\MusicProject\MusicProjectForms\Resources\Images");
+            var paths = Directory.GetFiles(@$"{Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName}\Resources\Images");
             foreach (var path in paths)
             {
                 var fileName = Path.GetFileNameWithoutExtension(path);
@@ -356,7 +356,7 @@ namespace MusicProjectForms
             }
             if (audioFile == null)
             {
-                audioFile = new AudioFileReader(@"C:\Users\viksu\Source\Repos\viksuper555\University\MusicProject\MusicProjectForms\Resources\Sounds\SAD!.mp3");
+                audioFile = new AudioFileReader(@$"{Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName}\Resources\Sounds\SAD!.mp3");
                 outputDevice.Init(audioFile);
             }
             outputDevice.Play();

@@ -29,7 +29,6 @@ namespace MusicProjectForms
                     }
                 }
             }
-
             int i = 0;
             foreach(var propInfo in Entity.GetType().GetProperties())
             {
@@ -75,6 +74,7 @@ namespace MusicProjectForms
             }
             
             InitializeComponent();
+            labelHeading.Text += type.Name;
         }
 
         private bool mouseDown;

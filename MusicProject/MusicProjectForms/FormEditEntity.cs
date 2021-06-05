@@ -20,6 +20,9 @@ namespace MusicProjectForms
             int i = 0;
             foreach(var propInfo in Entity.GetType().GetProperties())
             {
+                //Name is used for PK..
+                if (propInfo.Name == "Name")
+                    continue;
                 Control control = new Control();
 
                 Label label = new Label
@@ -40,20 +43,21 @@ namespace MusicProjectForms
                             Left = 100,
                             ForeColor = Main.DarkColor,
                             BorderStyle = BorderStyle.None,
-                            Height = 50,
+                            Height = 100,
                             TabIndex = 1,
                             CheckOnClick = true
                         };
-                    i += 2;
+                    i += 4;
                     control = a;
                     //TODO: Make this generic, to find Main lists by PropertyType. But we aren't hired by NASA yet.
+                    //If this is generic, saving could also become generic and the relationship information would become dynamic.
                     if (propInfo.PropertyType == typeof(List<Song>))
                     {
                         foreach (var item in (List<Song>)propInfo.GetValue(Entity))
                             a.Items.Add(item,true);
 
                         foreach (var item in Main.Songs.Except((List<Song>)propInfo.GetValue(Entity)))
-                            a.Items.Add(item, false);
+                            a.Items.Add(item);
                     }
                     else if (propInfo.PropertyType == typeof(List<Album>))
                     {
@@ -61,7 +65,31 @@ namespace MusicProjectForms
                             a.Items.Add(item, true);
 
                         foreach (var item in Main.Albums.Except((List<Album>)propInfo.GetValue(Entity)))
-                            a.Items.Add(item, false);
+                            a.Items.Add(item);
+                    }
+                    else if (propInfo.PropertyType == typeof(List<Artist>))
+                    {
+                        foreach (var item in (List<Artist>)propInfo.GetValue(Entity))
+                            a.Items.Add(item, true);
+
+                        foreach (var item in Main.Artists.Except((List<Artist>)propInfo.GetValue(Entity)))
+                            a.Items.Add(item);
+                    }
+                    else if (propInfo.PropertyType == typeof(List<Group>))
+                    {
+                        foreach (var item in (List<Group>)propInfo.GetValue(Entity))
+                            a.Items.Add(item, true);
+
+                        foreach (var item in Main.Groups.Except((List<Group>)propInfo.GetValue(Entity)))
+                            a.Items.Add(item);
+                    }
+                    else if (propInfo.PropertyType == typeof(Album))
+                    {
+                        a.Items.Add((Album)propInfo.GetValue(Entity), true);
+
+                        foreach (var item in Main.Albums.Except(new List<Album> { (Album)propInfo.GetValue(Entity) }))
+                            a.Items.Add(item);
+                        a.ItemCheck += UncheckOtherItems;
                     }
                     else
                         continue;
@@ -132,25 +160,40 @@ namespace MusicProjectForms
                 var control = Controls.Find(propInfo.Name, true).FirstOrDefault();
 
                 if (control == null) continue;
-                if (propInfo.PropertyType.IsPrimitive || propInfo.PropertyType == typeof(string))
+                Type type = propInfo.PropertyType;
+                if (type.IsPrimitive || type == typeof(string))
                 {
-                    Type type = propInfo.PropertyType;
-                    propInfo.SetValue(Entity, Convert.ChangeType(control.Text, propInfo.PropertyType));
+                    propInfo.SetValue(Entity, Convert.ChangeType(control.Text, type));
                 }
                 else
                 {
                     CheckedListBox listBox = (CheckedListBox)control;
-
-                    var instance = (IList)Activator.CreateInstance(propInfo.PropertyType);
-                    foreach (var item in listBox.CheckedItems)
+                    if(typeof(IEnumerable).IsAssignableFrom(type))
                     {
-                        instance.Add(item);
+
+                        var instance = (IList)Activator.CreateInstance(type);
+                        foreach (var item in listBox.CheckedItems)
+                        {
+                            instance.Add(item);
+                        }
+                        propInfo.SetValue(Entity, instance);
                     }
-                    propInfo.SetValue(Entity, instance);
+                    else
+                    {
+                        if (listBox.CheckedItems.Count == 0) continue;
+                        propInfo.SetValue(Entity, Convert.ChangeType(listBox.CheckedItems[0], type));
+                    }
                 }
             }
             DialogResult = DialogResult.OK;
             Close();
+        }
+        private void UncheckOtherItems(object sender, ItemCheckEventArgs e)
+        {
+            var listBox = sender as CheckedListBox;
+            if (e.NewValue == CheckState.Checked)
+                for (int ix = 0; ix < listBox.Items.Count; ++ix)
+                    if (e.Index != ix) listBox.SetItemChecked(ix, false);
         }
     }
 }

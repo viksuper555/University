@@ -57,4 +57,23 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <assembly alias="System.Drawing.Common" name="System.Drawing.Common, Version=4.0.2.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51" />
+  <data name="buttonAdd.Image" type="System.Drawing.Bitmap, System.Drawing.Common" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABkAAAAZCAYAAADE6YVjAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        wgAADsIBFShKgAAAALpJREFUSEvtjV0OgzAMg3uCDe19Z90pBieaNHap/SB3uCFpAipvfJKlKnbttAfn
+        /vnOwqktPLDLkDbwE+x2VEc0UxPiBdJT83z0dBrGG75NSB/n6Y6nsRqE/7Jgz5iGA5dKITJjGhW4UAqR
+        kqqpwIVSiCxxAwQXSiGiEwp94UIpRGwiQS6UQqROJMylLNh/rPvmEVgFplf7lMkZL2v63sc1HCOrOEbC
+        XO6vqzvSSqhdooW3qOvHByqJlD5Rfvini0T7DwAAAABJRU5ErkJggg==
+</value>
+  </data>
+  <data name="buttonCancel.Image" type="System.Drawing.Bitmap, System.Drawing.Common" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABkAAAAZCAYAAADE6YVjAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        wgAADsIBFShKgAAAAJxJREFUSEvFju0NgCAMRN3A7Z2JZZwBxYAfwOWu0MSX9Ift3cNl3cJ+TkyzOFKc
+        yf/+cHuocdaLazkB9MGDEeqhAYLcl4MV5p61YM3fqEU1B2ECdpdBIrQfpiesJ0fn6InL5IgPvzxQJkfm
+        6InrydExkBDtzTARu1NUgZprsBat+eE/k3tyEED7NCACPfAwSNfXLBxonJ8PRx5viAdU6SDnHdsg0gAA
+        AABJRU5ErkJggg==
+</value>
+  </data>
 </root>
