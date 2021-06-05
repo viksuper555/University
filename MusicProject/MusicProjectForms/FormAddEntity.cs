@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -15,6 +16,7 @@ namespace MusicProjectForms
     {
         public object Entity = new object();
         private string imagePath;
+        private string soundPath;
         private Label label;
         public FormAddEntity(string fullTypeName)
         {
@@ -128,21 +130,50 @@ namespace MusicProjectForms
                 Left = 100,
                 ForeColor = Main.BlueColor,
                 FlatStyle = FlatStyle.Flat,
+                Width = 85,
                 Height = 25,
                 TabIndex = 1
             };
             buttonAddImage.Click += buttonAddImage_Click;
-            i++;
             label = new Label
             {
                 Name = "AddImageLabel",
                 Top = 25 * i + 75,
-                Left = 100,
-                ForeColor = Main.BlueColor
+                Left = 200,
+                ForeColor = Main.BlueColor,
+                Width = 100
             };
 
             this.Controls.Add(buttonAddImage);
             this.Controls.Add(label);
+            if(Entity.GetType() == typeof(Song))
+            {
+                i++;
+                var buttonAddSound = new Button()
+                {
+                    Text = "Add Sound",
+                    Top = 25 * i + 85,
+                    Left = 100,
+                    ForeColor = Main.BlueColor,
+                    FlatStyle = FlatStyle.Flat,
+                    Width = 85,
+                    Height = 25,
+                    TabIndex = 1
+                };
+                buttonAddSound.Click += buttonAddSound_Click;
+                label = new Label
+                {
+                    Name = "AddSoundLabel",
+                    Top = 25 * i + 85,
+                    Left = 200,
+                    ForeColor = Main.BlueColor,
+                    Width = 100
+                };
+
+                this.Controls.Add(buttonAddSound);
+                this.Controls.Add(label);
+            }
+
             InitializeComponent();
             labelHeading.Text += type.Name;
         }
@@ -176,18 +207,49 @@ namespace MusicProjectForms
         {
             foreach (var propInfo in Entity.GetType().GetProperties())
             {
-                if (!propInfo.PropertyType.IsPrimitive && propInfo.PropertyType != typeof(string))
-                    continue;
+                var control = Controls.Find(propInfo.Name, true).FirstOrDefault();
+
+                if (control == null) continue;
                 Type type = propInfo.PropertyType;
-                propInfo.SetValue(Entity, Convert.ChangeType(Controls.Find(propInfo.Name, true)[0].Text,propInfo.PropertyType));
+                if (type.IsPrimitive || type == typeof(string))
+                {
+                    propInfo.SetValue(Entity, Convert.ChangeType(control.Text, type));
+                }
+                else
+                {
+                    CheckedListBox listBox = (CheckedListBox)control;
+                    if (typeof(IEnumerable).IsAssignableFrom(type))
+                    {
+
+                        var instance = (IList)Activator.CreateInstance(type);
+                        foreach (var item in listBox.CheckedItems)
+                        {
+                            instance.Add(item);
+                        }
+                        propInfo.SetValue(Entity, instance);
+                    }
+                    else
+                    {
+                        if (listBox.CheckedItems.Count == 0) continue;
+                        propInfo.SetValue(Entity, Convert.ChangeType(listBox.CheckedItems[0], type));
+                    }
+                }
             }
             if (imagePath != null)
             {
                 string fileName = (string)Entity.GetType().GetProperty("Name").GetValue(Entity);
                 string path = $@"{Main.ResourcesPath}/Images/{fileName}.{imagePath.Split('.').Last()}";
-                File.Delete(path);
+                try { File.Delete(path); } catch { }
                 File.Copy(imagePath, path);
             }
+            if (soundPath != null)
+            {
+                string fileName = (string)Entity.GetType().GetProperty("Name").GetValue(Entity);
+                string path = $@"{Main.ResourcesPath}/Sounds/{fileName}.{soundPath.Split('.').Last()}";
+                try { File.Delete(path); } catch { }
+                File.Copy(soundPath, path);
+            }          
+            
             DialogResult = DialogResult.OK;
             Close();
         }
@@ -212,6 +274,20 @@ namespace MusicProjectForms
                 imagePath = openFileDialog.FileName;
 
                 ((Label)this.Controls.Find("AddImageLabel", true).FirstOrDefault()).Text = openFileDialog.SafeFileName;
+            }
+        }
+        private void buttonAddSound_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog()
+            {
+                Filter = "Sound files (*.mp3, *.wav) | *.mp3; *.wav;"
+            };
+            var result = openFileDialog.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                soundPath = openFileDialog.FileName;
+
+                ((Label)this.Controls.Find("AddSoundLabel", true).FirstOrDefault()).Text = openFileDialog.SafeFileName;
             }
         }
     }

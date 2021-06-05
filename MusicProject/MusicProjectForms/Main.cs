@@ -6,9 +6,11 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Media;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml;
 using MusicProject;
 using NAudio.Wave;
 
@@ -23,6 +25,7 @@ namespace MusicProjectForms
         public static List<Group> Groups = new List<Group>();
         public static List<Song> Songs = new List<Song>();
         public static string ResourcesPath = @$"{Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName}\Resources";
+        public static string DBPath = @$"{Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName}\Database";
         ImageList imageList;
         object selectedObject = null;
         private WaveOutEvent outputDevice;
@@ -45,47 +48,8 @@ namespace MusicProjectForms
             #endregion
 
             this.FormClosing += OnButtonStopClick;
-
-
-            var jCole = new Artist() { Name = "J Cole", Age = 40, Nationality = "USA", BirthName = "Jermaine Cole" };
-            var kyle = new Artist() { Name = "Kyle", Age = 28, Nationality = "USA", BirthName = "Kyle Harvey" };
-
-            var gorillaz = new Group() { Name = "Gorillaz", Artists = new List<Artist>() { jCole }, };
-            var gorillaz2 = new Group() { Name = "Gorillaz", Artists = new List<Artist>() { kyle }, };
-
-
-            var album = new Album() { Name = "SAD!", Year = 2019, Artists = new List<Artist>() { jCole } };
-            var album2 = new Album() { Name = "Demon Days", Year = 2021, Artists = new List<Artist>() { kyle } };
-
-            var song = new Song() { Name = "pesen za dushata", Year = 1990, Genre = "Folk", Artists = new List<Artist>() { jCole }, Album = album };
-            var song2 = new Song() { Name = "pesen za dushata2", Year = 1990, Genre = "Folk", Artists = new List<Artist>() { kyle }, Album = album2 };
-
-            album.AddSong(song);
-            album2.AddSong(song2);
-            jCole.AddAlbum(album);
-            kyle.AddAlbum(album2);
-
-            Artists.Add(jCole);
-            Artists.Add(kyle);
-            Groups.Add(gorillaz);
-            Groups.Add(gorillaz2);
-            Albums.Add(album);
-            Albums.Add(album2);
-            var album3 = new Album() { Name = "Demon Days3", Year = 2021, Artists = new List<Artist>() { kyle } };
-            var album4 = new Album() { Name = "Demon Days4", Year = 2021, Artists = new List<Artist>() { kyle } };
-            var album5 = new Album() { Name = "Demon Days5", Year = 2021, Artists = new List<Artist>() { kyle } };
-            Albums.Add(album3);
-            Albums.Add(album4);
-            Albums.Add(album5);
-            var song3 = new Song() { Name = "pesen za dushata3", Year = 1990, Genre = "Folk", Artists = new List<Artist>() { jCole }, Album = album };
-            var song4= new Song() { Name = "pesen za dushata4", Year = 1990, Genre = "Folk", Artists = new List<Artist>() { jCole }, Album = album };
-            var song5 = new Song() { Name = "pesen za dushata5", Year = 1990, Genre = "Folk", Artists = new List<Artist>() { jCole }, Album = album };
-
-            Songs.Add(song);
-            Songs.Add(song2);
-            Songs.Add(song3);
-            Songs.Add(song4);
-            Songs.Add(song5);
+      
+            LoadAllData();
             UpdateListViewMain(Artists);
         }
 
@@ -186,7 +150,7 @@ namespace MusicProjectForms
                         outputDevice.Init(audioFile);
                         panelAudioControls.Visible = true;
                     }
-                    catch { }                   
+                    catch { }
                 }
             }
             //Ideally we want 200 Column width. If too many columns, we lower that value.
@@ -196,6 +160,7 @@ namespace MusicProjectForms
                 dataGridViewDetails.Columns[i].MinimumWidth = columnsWidth;
             }
             listView.SelectedItems[0].Selected = false;
+        
         }
 
         private void UpdateListViewMain<T>(T list)
@@ -214,6 +179,102 @@ namespace MusicProjectForms
                     ImageKey = entity.ToString()
                 });
             }
+            Validate();
+        }
+
+        private void buttonEdit_Click(object sender, EventArgs e)
+        {
+            if (selectedObject == null) return;
+
+            var entity = selectedObject;
+            var fp = new FormEditEntity(entity);
+
+            fp.ShowDialog();
+
+            if (fp.DialogResult == DialogResult.OK)
+            {
+                var newEntity = fp.Entity;
+                switch (entity.GetType().Name)
+                {
+                    case "Artist":
+                        for (int i = 0; i < Artists.Count; i++)
+                        {
+                            if (Artists[i].Name == ((Artist)entity).Name)
+                                Artists[i] = (Artist)newEntity;
+                        }
+                        UpdateListViewMain(Artists);
+                        Save(Artists);
+                        break;
+                    case "Group":
+                        for (int i = 0; i < Groups.Count; i++)
+                        {
+                            if (Groups[i].Name == ((Group)entity).Name)
+                                Groups[i] = (Group)newEntity;
+                        }
+                        UpdateListViewMain(Groups);
+                        Save(Groups);
+                        break;
+                    case "Album":
+                        for (int i = 0; i < Albums.Count; i++)
+                        {
+                            if (Albums[i].Name == ((Album)entity).Name)
+                                Albums[i] = (Album)newEntity;
+                        }
+                        UpdateListViewMain(Albums);
+                        Save(Albums);
+                        break;
+                    case "Song":
+                        for (int i = 0; i < Songs.Count; i++)
+                        {
+                            if (Songs[i].Name == ((Song)entity).Name)
+                                Songs[i] = (Song)newEntity;
+                        }
+                        UpdateListViewMain(Songs);
+                        Save(Songs);
+                        break;
+                }
+
+            }
+            selectedObject = null;
+            dataGridViewDetails.DataSource = null;
+            LoadImages();
+        }
+
+        private void buttonAdd_Click(object sender, EventArgs e)
+        {
+            var fp = new FormAddEntity(listViewMain.Items[0]?.Tag.GetType().FullName);
+
+            fp.ShowDialog();
+
+            if (fp.DialogResult == DialogResult.OK)
+            {
+                var entity = fp.Entity;
+                switch (entity.GetType().Name)
+                {
+                    case "Artist":
+                        Artists.Add((Artist)entity);
+                        UpdateListViewMain(Artists);
+                        Save(Artists);
+                        break;
+                    case "Group":
+                        Groups.Add((Group)entity);
+                        UpdateListViewMain(Groups);
+                        Save(Groups);
+                        break;
+                    case "Album":
+                        Albums.Add((Album)entity);
+                        UpdateListViewMain(Albums);
+                        Save(Albums);
+                        break;
+                    case "Song":
+                        Songs.Add((Song)entity);
+                        UpdateListViewMain(Songs);
+                        Save(Songs);
+                        break;
+                }
+
+            }
+            LoadImages();
             Validate();
         }
 
@@ -274,95 +335,6 @@ namespace MusicProjectForms
             dataGridViewDetails.DataSource = null;
 
         }
-
-        private void buttonEdit_Click(object sender, EventArgs e)
-        {
-            if (selectedObject == null) return;
-
-            var entity = selectedObject;
-            var fp = new FormEditEntity(entity);
-
-            fp.ShowDialog();
-
-            if (fp.DialogResult == DialogResult.OK)
-            {
-                var newEntity = fp.Entity;
-                switch (entity.GetType().Name)
-                {
-                    case "Artist":
-                        for (int i = 0; i < Artists.Count; i++)
-                        {
-                            if (Artists[i].Name == ((Artist)entity).Name)
-                                Artists[i] = (Artist)newEntity;
-                        }
-                        UpdateListViewMain(Artists);
-                        break;
-                    case "Group":
-                        for (int i = 0; i < Groups.Count; i++)
-                        {
-                            if (Groups[i].Name == ((Group)entity).Name)
-                                Groups[i] = (Group)newEntity;
-                        }
-                        UpdateListViewMain(Groups);
-                        break;
-                    case "Album":
-                        for (int i = 0; i < Albums.Count; i++)
-                        {
-                            if (Albums[i].Name == ((Album)entity).Name)
-                                Albums[i] = (Album)newEntity;
-                        }
-                        UpdateListViewMain(Albums);
-                        break;
-                    case "Song":
-                        for (int i = 0; i < Songs.Count; i++)
-                        {
-                            if (Songs[i].Name == ((Song)entity).Name)
-                                Songs[i] = (Song)newEntity;
-                        }
-                        UpdateListViewMain(Songs);
-                        break;
-                }
-
-            }
-            selectedObject = null;
-            dataGridViewDetails.DataSource = null;
-            LoadImages();
-        }
-
-        private void Add_Click(object sender, EventArgs e)
-        {
-            var fp = new FormAddEntity(listViewMain.Items[0]?.Tag.GetType().FullName);
-
-            fp.ShowDialog();
-
-            if (fp.DialogResult == DialogResult.OK)
-            {
-                var entity = fp.Entity;
-                switch (entity.GetType().Name)
-                {
-                    case "Artist":
-                        Artists.Add((Artist)entity);
-                        UpdateListViewMain(Artists);
-                        break;
-                    case "Group":
-                        Groups.Add((Group)entity);
-                        UpdateListViewMain(Groups);
-                        break;
-                    case "Album":
-                        Albums.Add((Album)entity);
-                        UpdateListViewMain(Albums);
-                        break;
-                    case "Song":
-                        Songs.Add((Song)entity);
-                        UpdateListViewMain(Songs);
-                        break;
-                }
-
-            }
-            LoadImages();
-            Validate();
-        }
-
         private void OnButtonPlayClick(object sender, EventArgs e)
         {            
             outputDevice?.Play();
@@ -409,6 +381,44 @@ namespace MusicProjectForms
                 listViewMain.LargeImageList = imageList;
             }
         }
+        public static void SaveAllData()
+        {
+            Save(Albums);
+            Save(Artists);
+            Save(Songs);
+            Save(Groups);
+        }
+        public static void LoadAllData()
+        {
+            Albums = (List<Album>)Read(Albums.GetType());
+            Artists = (List<Artist>)Read(Artists.GetType());
+            Groups = (List<Group>)Read(Groups.GetType());
+            Songs = (List<Song>)Read(Songs.GetType());
+        }
+        public static void Save(object obj)
+        {
+            DataContractSerializer ser = new DataContractSerializer(obj.GetType());
 
+            using (XmlWriter txtWriter = XmlWriter.Create($@"{DBPath}\{obj.GetType().GetGenericArguments().Single().Name}s.xml"))
+            {
+                ser.WriteObject(txtWriter, obj);
+            }
+        }
+
+        public static object Read(Type toType)
+        {
+            using (XmlReader reader = XmlReader.Create($@"{DBPath}\{toType.GetGenericArguments().Single().Name}s.xml"))
+            {
+                DataContractSerializer deserializer = new DataContractSerializer(toType);
+                return deserializer.ReadObject(reader);
+            }
+            
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            SaveAllData();
+            base.OnClosed(e);
+        }
     }
 }

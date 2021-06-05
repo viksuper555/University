@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 
 namespace MusicProject
 {
+    [Serializable]
+    [DataContract(IsReference = true)]
     public class Group : Creator, ICreator
     {
+        [DataMember]
         public List<Artist> Artists { get; set; } = new List<Artist>();
     
         private bool Active { get; set; }

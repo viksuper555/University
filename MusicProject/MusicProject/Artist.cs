@@ -1,16 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 
 namespace MusicProject
 {
+    [Serializable]
+    [DataContract(IsReference = true)]
     public class Artist : Creator, ICreator
     {
+        [DataMember]
         public string BirthName { get; set; }
-
+        [DataMember]
         public int Age { get; set; }
-
+        [DataMember]
         public string Nationality { get; set; }
 
         private int? YearOfDeath { get; set; }

@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 
 namespace MusicProject
-{
+{ 
+    [DataContract(IsReference = true)]
     public class Album
     {
         private string name;
-
+        [DataMember]
         public string Name
         {
             get { return name; }
@@ -17,14 +19,17 @@ namespace MusicProject
 
         private int year;
 
+        [DataMember]
         public int Year
         {
             get { return year; }
             set { year = value; }
         }
 
+        [DataMember]
         public List<Song> Songs { get; set; } = new List<Song>();
 
+        [DataMember]
         public List<Artist> Artists { get; set; } = new List<Artist>();
 
         private Popularity popularity;
