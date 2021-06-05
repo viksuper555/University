@@ -45,7 +45,7 @@ namespace MusicProjectForms
 
             this.FormClosing += OnButtonStopClick;
 
-            var paths = Directory.GetFiles(@"C:\Users\Viktor\source\repos\viksuper555\University\MusicProject\MusicProjectForms\Resources\Images");
+            var paths = Directory.GetFiles(@"C:\Users\viksu\Source\Repos\viksuper555\University\MusicProject\MusicProjectForms\Resources\Images");
             foreach (var path in paths)
             {
                 var fileName = Path.GetFileNameWithoutExtension(path);
@@ -78,8 +78,21 @@ namespace MusicProjectForms
             Groups.Add(gorillaz2);
             Albums.Add(album);
             Albums.Add(album2);
+            var album3 = new Album() { Name = "Demon Days3", Year = 2021, Artists = new List<Artist>() { kyle } };
+            var album4 = new Album() { Name = "Demon Days4", Year = 2021, Artists = new List<Artist>() { kyle } };
+            var album5 = new Album() { Name = "Demon Days5", Year = 2021, Artists = new List<Artist>() { kyle } };
+            Albums.Add(album3);
+            Albums.Add(album4);
+            Albums.Add(album5);
+            var song3 = new Song() { Name = "pesen za dushata3", Year = 1990, Genre = "Folk", Artists = new List<Artist>() { jCole }, Album = album };
+            var song4= new Song() { Name = "pesen za dushata4", Year = 1990, Genre = "Folk", Artists = new List<Artist>() { jCole }, Album = album };
+            var song5 = new Song() { Name = "pesen za dushata5", Year = 1990, Genre = "Folk", Artists = new List<Artist>() { jCole }, Album = album };
+
             Songs.Add(song);
             Songs.Add(song2);
+            Songs.Add(song3);
+            Songs.Add(song4);
+            Songs.Add(song5);
             UpdateListViewMain(Artists);
         }
 
@@ -343,7 +356,7 @@ namespace MusicProjectForms
             }
             if (audioFile == null)
             {
-                audioFile = new AudioFileReader(@"C:\Users\Viktor\source\repos\viksuper555\University\MusicProject\MusicProjectForms\Resources\Sounds\SAD!.mp3");
+                audioFile = new AudioFileReader(@"C:\Users\viksu\Source\Repos\viksuper555\University\MusicProject\MusicProjectForms\Resources\Sounds\SAD!.mp3");
                 outputDevice.Init(audioFile);
             }
             outputDevice.Play();

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -35,20 +36,31 @@ namespace MusicProjectForms
                     var a = new CheckedListBox()
                         {
                             Name = propInfo.Name,
-                            Top = 25 * i++ + 75,
+                            Top = 25 * i+ 75,
                             Left = 100,
                             ForeColor = Main.DarkColor,
                             BorderStyle = BorderStyle.None,
                             Height = 50,
                             TabIndex = 1,
+                            CheckOnClick = true
                         };
+                    i += 2;
                     control = a;
+                    //TODO: Make this generic, to find Main lists by PropertyType. But we aren't hired by NASA yet.
                     if (propInfo.PropertyType == typeof(List<Song>))
                     {
                         foreach (var item in (List<Song>)propInfo.GetValue(Entity))
                             a.Items.Add(item,true);
 
                         foreach (var item in Main.Songs.Except((List<Song>)propInfo.GetValue(Entity)))
+                            a.Items.Add(item, false);
+                    }
+                    else if (propInfo.PropertyType == typeof(List<Album>))
+                    {
+                        foreach (var item in (List<Album>)propInfo.GetValue(Entity))
+                            a.Items.Add(item, true);
+
+                        foreach (var item in Main.Albums.Except((List<Album>)propInfo.GetValue(Entity)))
                             a.Items.Add(item, false);
                     }
                     else
@@ -128,8 +140,13 @@ namespace MusicProjectForms
                 else
                 {
                     CheckedListBox listBox = (CheckedListBox)control;
-                    List<object> list = listBox.CheckedItems.OfType<object>().ToList();
-                    propInfo.SetValue(Entity, list.Select(item => Convert.ChangeType(item, propInfo.PropertyType)).ToList());
+
+                    var instance = (IList)Activator.CreateInstance(propInfo.PropertyType);
+                    foreach (var item in listBox.CheckedItems)
+                    {
+                        instance.Add(item);
+                    }
+                    propInfo.SetValue(Entity, instance);
                 }
             }
             DialogResult = DialogResult.OK;
