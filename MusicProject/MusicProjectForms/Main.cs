@@ -18,11 +18,12 @@ namespace MusicProjectForms
     {
         public static Color BlueColor = Color.FromArgb(10, 146, 234);
         public static Color DarkColor = Color.FromArgb(34, 34, 34);
-        List<Artist> artists = new List<Artist>();
-        List<Album> albums = new List<Album>();
-        List<Group> groups = new List<Group>();
-        List<Song> songs = new List<Song>();
+        public static List<Artist> Artists = new List<Artist>();
+        public static List<Album> Albums = new List<Album>();
+        public static List<Group> Groups = new List<Group>();
+        public static List<Song> Songs = new List<Song>();
         ImageList imageList = new ImageList();
+        object selectedObject = null;
         private WaveOutEvent outputDevice;
         private AudioFileReader audioFile;
         public Main()
@@ -71,22 +72,15 @@ namespace MusicProjectForms
             jCole.AddAlbum(album);
             kyle.AddAlbum(album2);
 
-            artists.Add(jCole);
-            artists.Add(kyle);
-            artists.Add(kyle);
-            artists.Add(kyle);
-            artists.Add(kyle);
-            artists.Add(kyle);
-            artists.Add(kyle);
-            artists.Add(kyle);
-            artists.Add(kyle);
-            groups.Add(gorillaz);
-            groups.Add(gorillaz2);
-            albums.Add(album);
-            albums.Add(album2);
-            songs.Add(song);
-            songs.Add(song2);
-            UpdateListViewMain(artists);
+            Artists.Add(jCole);
+            Artists.Add(kyle);
+            Groups.Add(gorillaz);
+            Groups.Add(gorillaz2);
+            Albums.Add(album);
+            Albums.Add(album2);
+            Songs.Add(song);
+            Songs.Add(song2);
+            UpdateListViewMain(Artists);
         }
 
         private bool mouseDown;
@@ -118,28 +112,28 @@ namespace MusicProjectForms
         {
             panelButtonSelection.Top = buttonArtists.Top;
             panelButtonSelection.Height = buttonArtists.Height;
-            UpdateListViewMain(artists);
+            UpdateListViewMain(Artists);
         }
 
         private void buttonGroups_Click(object sender, EventArgs e)
         {
             panelButtonSelection.Top = buttonGroups.Top;
             panelButtonSelection.Height = buttonGroups.Height;
-            UpdateListViewMain(groups);
+            UpdateListViewMain(Groups);
         }
 
         private void buttonSongs_Click(object sender, EventArgs e)
         {
             panelButtonSelection.Top = buttonSongs.Top;
             panelButtonSelection.Height = buttonSongs.Height;
-            UpdateListViewMain(songs);
+            UpdateListViewMain(Songs);
         }
 
         private void buttonAlbums_Click(object sender, EventArgs e)
         {
             panelButtonSelection.Top = buttonAlbums.Top;
             panelButtonSelection.Height = buttonAlbums.Height;
-            UpdateListViewMain(albums);
+            UpdateListViewMain(Albums);
         }
 
         private void buttonClose_Click(object sender, EventArgs e)
@@ -165,9 +159,9 @@ namespace MusicProjectForms
             var listView = sender as ListView;
             if (listView.SelectedItems.Count == 0)
                 return;
-            var item = listView.SelectedItems[0].Tag;
+            selectedObject = listView.SelectedItems[0].Tag;
 
-            dataGridViewDetails.DataSource = new List<object>() { item };
+            dataGridViewDetails.DataSource = new List<object>() { selectedObject };
 
             //Ideally we want 200 Column width. If too many columns, we lower that value.
             var columnsWidth = Math.Min(829 / dataGridViewDetails.Columns.Count, 200);
@@ -181,6 +175,7 @@ namespace MusicProjectForms
         private void UpdateListViewMain<T>(T list)
         {
             listViewMain.Items.Clear();
+            selectedObject = null;
 
             panelAudioControls.Visible = ((IEnumerable<object>)list).FirstOrDefault().GetType() == typeof(Song);            
 
@@ -199,63 +194,65 @@ namespace MusicProjectForms
         {
             if (dataGridViewDetails.Rows.Count == 0)
                 return;
-            var a = dataGridViewDetails.Rows[0]?.DataBoundItem;
-            if (a == null)
+            if (selectedObject == null)
                 return;
-            switch (a.GetType().Name)
+            switch (selectedObject.GetType().Name)
             {
                 case "Artist":
-                    for (int i = artists.Count - 1; i >= 0; i--)
+                    for (int i = Artists.Count - 1; i >= 0; i--)
                     {
-                        if (artists[i].Name == (a as Artist).Name)
+                        if (Artists[i].Name == (selectedObject as Artist).Name)
                         {
-                            artists.RemoveAt(i);
-                            UpdateListViewMain(artists);
+                            Artists.RemoveAt(i);
+                            UpdateListViewMain(Artists);
                             break;
                         }
                     }
                     break;
                 case "Song":
-                    for (int i = songs.Count - 1; i >= 0; i--)
+                    for (int i = Songs.Count - 1; i >= 0; i--)
                     {
-                        if (songs[i].Name == (a as Song).Name)
+                        if (Songs[i].Name == (selectedObject as Song).Name)
                         {
-                            songs.RemoveAt(i);
-                            UpdateListViewMain(songs);
+                            Songs.RemoveAt(i);
+                            UpdateListViewMain(Songs);
                             break;
                         }
                     }
                     break;
                 case "Album":
-                    for (int i = albums.Count - 1; i >= 0; i--)
+                    for (int i = Albums.Count - 1; i >= 0; i--)
                     {
-                        if (albums[i].Name == (a as Album).Name)
+                        if (Albums[i].Name == (selectedObject as Album).Name)
                         {
-                            albums.RemoveAt(i);
-                            UpdateListViewMain(albums);
+                            Albums.RemoveAt(i);
+                            UpdateListViewMain(Albums);
                             break;
                         }
                     }
                     break;
                 case "Group":
-                    for (int i = groups.Count - 1; i >= 0; i--)
+                    for (int i = Groups.Count - 1; i >= 0; i--)
                     {
-                        if (groups[i].Name == (a as Group).Name)
+                        if (Groups[i].Name == (selectedObject as Group).Name)
                         {
-                            groups.RemoveAt(i);
-                            UpdateListViewMain(groups);
+                            Groups.RemoveAt(i);
+                            UpdateListViewMain(Groups);
                             break;
                         }
                     }
                     break;
             }
+            selectedObject = null;
+            dataGridViewDetails.DataSource = null;
 
         }
 
         private void buttonEdit_Click(object sender, EventArgs e)
         {
-            if (listViewMain.SelectedItems.Count == 0) return;
-            var entity = listViewMain.SelectedItems[0].Tag;
+            if (selectedObject == null) return;
+
+            var entity = selectedObject;
             var fp = new FormEditEntity(entity);
 
             fp.ShowDialog();
@@ -266,41 +263,42 @@ namespace MusicProjectForms
                 switch (entity.GetType().Name)
                 {
                     case "Artist":
-                        for (int i = 0; i < artists.Count; i++)
+                        for (int i = 0; i < Artists.Count; i++)
                         {
-                            if (artists[i].Name == ((Artist)entity).Name)
-                                artists[i] = (Artist)newEntity;
+                            if (Artists[i].Name == ((Artist)entity).Name)
+                                Artists[i] = (Artist)newEntity;
                         }
-                        UpdateListViewMain(artists);
+                        UpdateListViewMain(Artists);
                         break;
                     case "Group":
-                        for (int i = 0; i < groups.Count; i++)
+                        for (int i = 0; i < Groups.Count; i++)
                         {
-                            if (groups[i].Name == ((Group)entity).Name)
-                                groups[i] = (Group)newEntity;
+                            if (Groups[i].Name == ((Group)entity).Name)
+                                Groups[i] = (Group)newEntity;
                         }
-                        UpdateListViewMain(groups);
+                        UpdateListViewMain(Groups);
                         break;
                     case "Album":
-                        for (int i = 0; i < albums.Count; i++)
+                        for (int i = 0; i < Albums.Count; i++)
                         {
-                            if (albums[i].Name == ((Album)entity).Name)
-                                albums[i] = (Album)newEntity;
+                            if (Albums[i].Name == ((Album)entity).Name)
+                                Albums[i] = (Album)newEntity;
                         }
-                        UpdateListViewMain(albums);
+                        UpdateListViewMain(Albums);
                         break;
                     case "Song":
-                        for (int i = 0; i < songs.Count; i++)
+                        for (int i = 0; i < Songs.Count; i++)
                         {
-                            if (songs[i].Name == ((Song)entity).Name)
-                                songs[i] = (Song)newEntity;
+                            if (Songs[i].Name == ((Song)entity).Name)
+                                Songs[i] = (Song)newEntity;
                         }
-                        UpdateListViewMain(songs);
+                        UpdateListViewMain(Songs);
                         break;
                 }
 
             }
-            Validate();
+            selectedObject = null;
+            dataGridViewDetails.DataSource = null;
         }
 
         private void Add_Click(object sender, EventArgs e)
@@ -315,20 +313,20 @@ namespace MusicProjectForms
                 switch (entity.GetType().Name)
                 {
                     case "Artist":
-                        artists.Add((Artist)entity);
-                        UpdateListViewMain(artists);
+                        Artists.Add((Artist)entity);
+                        UpdateListViewMain(Artists);
                         break;
                     case "Group":
-                        groups.Add((Group)entity);
-                        UpdateListViewMain(groups);
+                        Groups.Add((Group)entity);
+                        UpdateListViewMain(Groups);
                         break;
                     case "Album":
-                        albums.Add((Album)entity);
-                        UpdateListViewMain(albums);
+                        Albums.Add((Album)entity);
+                        UpdateListViewMain(Albums);
                         break;
                     case "Song":
-                        songs.Add((Song)entity);
-                        UpdateListViewMain(songs);
+                        Songs.Add((Song)entity);
+                        UpdateListViewMain(Songs);
                         break;
                 }
 

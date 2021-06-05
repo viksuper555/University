@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using MusicProject;
@@ -18,8 +19,7 @@ namespace MusicProjectForms
             int i = 0;
             foreach(var propInfo in Entity.GetType().GetProperties())
             {
-                if (!propInfo.PropertyType.IsPrimitive && propInfo.PropertyType != typeof(string))
-                    continue;
+                Control control = new Control();
 
                 Label label = new Label
                 {
@@ -30,7 +30,31 @@ namespace MusicProjectForms
                     ForeColor = Main.BlueColor
                 };
 
-                Control control = new Control();
+                if (!propInfo.PropertyType.IsPrimitive && propInfo.PropertyType != typeof(string))
+                {
+                    var a = new CheckedListBox()
+                        {
+                            Name = propInfo.Name,
+                            Top = 25 * i++ + 75,
+                            Left = 100,
+                            ForeColor = Main.DarkColor,
+                            BorderStyle = BorderStyle.None,
+                            Height = 50,
+                            TabIndex = 1,
+                        };
+                    control = a;
+                    if (propInfo.PropertyType == typeof(List<Song>))
+                    {
+                        foreach (var item in (List<Song>)propInfo.GetValue(Entity))
+                            a.Items.Add(item,true);
+
+                        foreach (var item in Main.Songs.Except((List<Song>)propInfo.GetValue(Entity)))
+                            a.Items.Add(item, false);
+                    }
+                    else
+                        continue;
+                }
+
                 if (propInfo.PropertyType == typeof(string))
                     control = new TextBox()
                     {
@@ -40,7 +64,8 @@ namespace MusicProjectForms
                         Left = 100,
                         ForeColor = Main.DarkColor,
                         BorderStyle = BorderStyle.None,
-                        TabIndex = 1
+                        TabIndex = 1,
+                        Text = (string)propInfo.GetValue(Entity)
                     };
                 else if (propInfo.PropertyType == typeof(int) || propInfo.PropertyType == typeof(double))
                     control = new NumericUpDown()
@@ -52,7 +77,8 @@ namespace MusicProjectForms
                         Left = 100,
                         ForeColor = Main.DarkColor,
                         BorderStyle = BorderStyle.None,
-                        TabIndex = 1
+                        TabIndex = 1,
+                        Value = Convert.ToDecimal(propInfo.GetValue(Entity))
                     };
 
                 this.Controls.Add(label);
@@ -87,14 +113,24 @@ namespace MusicProjectForms
             mouseDown = false;
         }
 
-        private void buttonAdd_Click(object sender, EventArgs e)
+        private void buttonEdit_Click(object sender, EventArgs e)
         {
             foreach (var propInfo in Entity.GetType().GetProperties())
             {
-                if (!propInfo.PropertyType.IsPrimitive && propInfo.PropertyType != typeof(string))
-                    continue;
-                Type type = propInfo.PropertyType;
-                propInfo.SetValue(Entity, Convert.ChangeType(Controls.Find(propInfo.Name, true)[0].Text,propInfo.PropertyType));
+                var control = Controls.Find(propInfo.Name, true).FirstOrDefault();
+
+                if (control == null) continue;
+                if (propInfo.PropertyType.IsPrimitive || propInfo.PropertyType == typeof(string))
+                {
+                    Type type = propInfo.PropertyType;
+                    propInfo.SetValue(Entity, Convert.ChangeType(control.Text, propInfo.PropertyType));
+                }
+                else
+                {
+                    CheckedListBox listBox = (CheckedListBox)control;
+                    List<object> list = listBox.CheckedItems.OfType<object>().ToList();
+                    propInfo.SetValue(Entity, list.Select(item => Convert.ChangeType(item, propInfo.PropertyType)).ToList());
+                }
             }
             DialogResult = DialogResult.OK;
             Close();

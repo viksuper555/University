@@ -14,6 +14,7 @@ namespace MusicProject
         public void AddAlbum(Album album)
         {
             this.Albums.Add(album);
+            this.Singles.AddRange(album.GetSongs());
         }
 
         public void DeleteAlbum(string name)

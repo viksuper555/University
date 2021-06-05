@@ -97,7 +97,7 @@ namespace MusicProjectForms
             this.buttonAdd.Text = "Edit";
             this.buttonAdd.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.buttonAdd.UseVisualStyleBackColor = false;
-            this.buttonAdd.Click += new System.EventHandler(this.buttonAdd_Click);
+            this.buttonAdd.Click += new System.EventHandler(this.buttonEdit_Click);
             this.buttonAdd.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Main_MouseDown);
             this.buttonAdd.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Main_MouseMove);
             this.buttonAdd.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Main_MouseUp);
