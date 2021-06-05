@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -13,19 +14,25 @@ namespace MusicProjectForms
 {
     public partial class FormEditEntity : Form
     {
+        private string imagePath;
         public object Entity;
         public FormEditEntity(object entity)
         {
             Entity = entity;
             int i = 0;
+            Label label;
+            string name = "";
             foreach(var propInfo in Entity.GetType().GetProperties())
             {
                 //Name is used for PK..
                 if (propInfo.Name == "Name")
+                {
+                    name = (string)propInfo.GetValue(Entity);
                     continue;
+                }
                 Control control = new Control();
 
-                Label label = new Label
+                label = new Label
                 {
                     Text = propInfo.Name,
                     Top = 25 * i + 75,
@@ -124,7 +131,32 @@ namespace MusicProjectForms
                 this.Controls.Add(label);
                 this.Controls.Add(control);
             }
-            
+
+            var buttonAddImage = new Button()
+            {
+                Text = "Add Image",
+                Top = 25 * i + 75,
+                Left = 100,
+                ForeColor = Main.BlueColor,
+                FlatStyle = FlatStyle.Flat,
+                Height = 25,
+                TabIndex = 1
+            };
+            buttonAddImage.Click += buttonAddImage_Click;
+            i++;
+            label = new Label
+            {
+                Name = "AddImageLabel",
+                Top = 25 * i + 75,
+                Left = 100,
+                ForeColor = Main.BlueColor,
+                Text = Directory.GetFiles($@"{Main.ResourcesPath}/Images/","*.*")
+                    .Select(Path.GetFileName)
+                    .Where(x => x.Split('.')[0] == name).FirstOrDefault()
+            };
+
+            this.Controls.Add(buttonAddImage);
+            this.Controls.Add(label);
             InitializeComponent();
         }
 
@@ -186,6 +218,14 @@ namespace MusicProjectForms
                 }
             }
             DialogResult = DialogResult.OK;
+            if (imagePath != null)
+            {
+                string fileName = (string)Entity.GetType().GetProperty("Name").GetValue(Entity);
+                string path = $@"{Main.ResourcesPath}/Images/{fileName}.{imagePath.Split('.').Last()}";
+                File.Delete(path);
+                File.Copy(imagePath, path);                
+            }
+
             Close();
         }
         private void UncheckOtherItems(object sender, ItemCheckEventArgs e)
@@ -194,6 +234,21 @@ namespace MusicProjectForms
             if (e.NewValue == CheckState.Checked)
                 for (int ix = 0; ix < listBox.Items.Count; ++ix)
                     if (e.Index != ix) listBox.SetItemChecked(ix, false);
+        }
+
+        private void buttonAddImage_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog()
+            {
+                Filter = "Image files (*.jpg, *.jpeg, *.jpe, *.jfif, *.png) | *.jpg; *.jpeg; *.jpe; *.jfif; *.png"
+            };
+            var result = openFileDialog.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                imagePath = openFileDialog.FileName;
+
+                ((Label)this.Controls.Find("AddImageLabel", true).FirstOrDefault()).Text = openFileDialog.SafeFileName;
+            }
         }
     }
 }

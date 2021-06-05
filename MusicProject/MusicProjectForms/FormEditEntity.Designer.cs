@@ -72,9 +72,9 @@ namespace MusicProjectForms
             this.panelBot.Controls.Add(this.buttonAdd);
             this.panelBot.Controls.Add(this.buttonCancel);
             this.panelBot.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panelBot.Location = new System.Drawing.Point(0, 408);
+            this.panelBot.Location = new System.Drawing.Point(0, 464);
             this.panelBot.Name = "panelBot";
-            this.panelBot.Size = new System.Drawing.Size(350, 42);
+            this.panelBot.Size = new System.Drawing.Size(350, 36);
             this.panelBot.TabIndex = 1;
             this.panelBot.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Main_MouseDown);
             this.panelBot.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Main_MouseMove);
@@ -93,7 +93,7 @@ namespace MusicProjectForms
             this.buttonAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.buttonAdd.Location = new System.Drawing.Point(181, 0);
             this.buttonAdd.Name = "buttonAdd";
-            this.buttonAdd.Size = new System.Drawing.Size(74, 42);
+            this.buttonAdd.Size = new System.Drawing.Size(74, 36);
             this.buttonAdd.TabIndex = 4;
             this.buttonAdd.Text = "Edit";
             this.buttonAdd.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -116,7 +116,7 @@ namespace MusicProjectForms
             this.buttonCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.buttonCancel.Location = new System.Drawing.Point(255, 0);
             this.buttonCancel.Name = "buttonCancel";
-            this.buttonCancel.Size = new System.Drawing.Size(95, 42);
+            this.buttonCancel.Size = new System.Drawing.Size(95, 36);
             this.buttonCancel.TabIndex = 5;
             this.buttonCancel.Text = "Cancel";
             this.buttonCancel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -130,7 +130,7 @@ namespace MusicProjectForms
             this.panelMid.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelMid.Location = new System.Drawing.Point(0, 43);
             this.panelMid.Name = "panelMid";
-            this.panelMid.Size = new System.Drawing.Size(350, 365);
+            this.panelMid.Size = new System.Drawing.Size(350, 421);
             this.panelMid.TabIndex = 2;
             this.panelMid.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Main_MouseDown);
             this.panelMid.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Main_MouseMove);
@@ -143,7 +143,7 @@ namespace MusicProjectForms
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(34)))), ((int)(((byte)(34)))));
             this.CancelButton = this.buttonCancel;
-            this.ClientSize = new System.Drawing.Size(350, 450);
+            this.ClientSize = new System.Drawing.Size(350, 500);
             this.Controls.Add(this.panelMid);
             this.Controls.Add(this.panelBot);
             this.Controls.Add(this.panelTop);

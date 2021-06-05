@@ -22,15 +22,16 @@ namespace MusicProjectForms
         public static List<Album> Albums = new List<Album>();
         public static List<Group> Groups = new List<Group>();
         public static List<Song> Songs = new List<Song>();
-        ImageList imageList = new ImageList();
+        public static string ResourcesPath = @$"{Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName}\Resources";
+        ImageList imageList;
         object selectedObject = null;
         private WaveOutEvent outputDevice;
         private AudioFileReader audioFile;
         public Main()
         {
             InitializeComponent();
+            LoadImages();
             #region Design stuff
-            imageList.ImageSize = new Size(100, 100);
             dataGridViewDetails.ColumnHeadersDefaultCellStyle.BackColor = DarkColor;
             dataGridViewDetails.ColumnHeadersDefaultCellStyle.ForeColor = BlueColor;
             dataGridViewDetails.RowHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
@@ -44,14 +45,6 @@ namespace MusicProjectForms
             #endregion
 
             this.FormClosing += OnButtonStopClick;
-
-            var paths = Directory.GetFiles(@$"{Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName}\Resources\Images");
-            foreach (var path in paths)
-            {
-                var fileName = Path.GetFileNameWithoutExtension(path);
-                imageList.Images.Add(fileName, Image.FromFile(path));
-                listViewMain.LargeImageList = imageList;
-            }
 
 
             var jCole = new Artist() { Name = "J Cole", Age = 40, Nationality = "USA", BirthName = "Jermaine Cole" };
@@ -176,6 +169,26 @@ namespace MusicProjectForms
 
             dataGridViewDetails.DataSource = new List<object>() { selectedObject };
 
+            panelAudioControls.Visible = false;
+            if (selectedObject.GetType() == typeof(Song))
+            {
+                if (outputDevice == null)
+                {
+                    outputDevice = new WaveOutEvent();
+                    outputDevice.PlaybackStopped += OnPlaybackStopped;
+                }
+                if (audioFile == null)
+                {
+                    string songName = (string)selectedObject.GetType().GetProperty("Name").GetValue(selectedObject);
+                    try
+                    {
+                        audioFile = new AudioFileReader(ResourcesPath + $@"\Sounds\{songName}.mp3");
+                        outputDevice.Init(audioFile);
+                        panelAudioControls.Visible = true;
+                    }
+                    catch { }                   
+                }
+            }
             //Ideally we want 200 Column width. If too many columns, we lower that value.
             var columnsWidth = Math.Min(829 / dataGridViewDetails.Columns.Count, 200);
             for (int i = 0; i < dataGridViewDetails.Columns.Count; i++)
@@ -188,9 +201,9 @@ namespace MusicProjectForms
         private void UpdateListViewMain<T>(T list)
         {
             listViewMain.Items.Clear();
+            dataGridViewDetails.DataSource = null;
             selectedObject = null;
-
-            panelAudioControls.Visible = ((IEnumerable<object>)list).FirstOrDefault().GetType() == typeof(Song);            
+            panelAudioControls.Visible = false;
 
             foreach (var entity in list as IEnumerable<object>)
             {
@@ -201,6 +214,7 @@ namespace MusicProjectForms
                     ImageKey = entity.ToString()
                 });
             }
+            Validate();
         }
 
         private void buttonDelete_Click(object sender, EventArgs e)
@@ -312,6 +326,7 @@ namespace MusicProjectForms
             }
             selectedObject = null;
             dataGridViewDetails.DataSource = null;
+            LoadImages();
         }
 
         private void Add_Click(object sender, EventArgs e)
@@ -344,22 +359,13 @@ namespace MusicProjectForms
                 }
 
             }
+            LoadImages();
             Validate();
         }
 
         private void OnButtonPlayClick(object sender, EventArgs e)
-        {
-            if (outputDevice == null)
-            {
-                outputDevice = new WaveOutEvent();
-                outputDevice.PlaybackStopped += OnPlaybackStopped;
-            }
-            if (audioFile == null)
-            {
-                audioFile = new AudioFileReader(@$"{Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName}\Resources\Sounds\SAD!.mp3");
-                outputDevice.Init(audioFile);
-            }
-            outputDevice.Play();
+        {            
+            outputDevice?.Play();
         }
         private void OnPlaybackStopped(object sender, StoppedEventArgs args)
         {
@@ -389,5 +395,20 @@ namespace MusicProjectForms
             if (audioFile != null)
                 audioFile.Volume = trackBarVolume.Value / 100f;
         }
+        public void LoadImages()
+        {
+            var paths = Directory.GetFiles(ResourcesPath + @"\Images");
+            imageList = new ImageList()
+            {
+                ImageSize = new Size(100, 100)
+            };
+            foreach (var path in paths)
+            {
+                var fileName = Path.GetFileNameWithoutExtension(path);
+                imageList.Images.Add(fileName, Image.FromFile(path));
+                listViewMain.LargeImageList = imageList;
+            }
+        }
+
     }
 }

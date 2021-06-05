@@ -31,8 +31,8 @@ namespace MusicProjectForms
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panelLeft = new System.Windows.Forms.Panel();
             this.panelButtonSelection = new System.Windows.Forms.Panel();
             this.buttonAlbums = new System.Windows.Forms.Button();
@@ -264,7 +264,7 @@ namespace MusicProjectForms
             this.buttonMinimize.Dock = System.Windows.Forms.DockStyle.Right;
             this.buttonMinimize.FlatAppearance.BorderSize = 0;
             this.buttonMinimize.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonMinimize.Image = global::MusicProjectForms.Properties.Resources.minimize;
+            this.buttonMinimize.Image = ((System.Drawing.Image)(resources.GetObject("buttonMinimize.Image")));
             this.buttonMinimize.Location = new System.Drawing.Point(744, 0);
             this.buttonMinimize.Name = "buttonMinimize";
             this.buttonMinimize.Size = new System.Drawing.Size(35, 31);
@@ -279,7 +279,7 @@ namespace MusicProjectForms
             this.buttonMaximize.Dock = System.Windows.Forms.DockStyle.Right;
             this.buttonMaximize.FlatAppearance.BorderSize = 0;
             this.buttonMaximize.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonMaximize.Image = global::MusicProjectForms.Properties.Resources.maximize;
+            this.buttonMaximize.Image = ((System.Drawing.Image)(resources.GetObject("buttonMaximize.Image")));
             this.buttonMaximize.Location = new System.Drawing.Point(779, 0);
             this.buttonMaximize.Name = "buttonMaximize";
             this.buttonMaximize.Size = new System.Drawing.Size(35, 31);
@@ -294,7 +294,7 @@ namespace MusicProjectForms
             this.buttonClose.Dock = System.Windows.Forms.DockStyle.Right;
             this.buttonClose.FlatAppearance.BorderSize = 0;
             this.buttonClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonClose.Image = global::MusicProjectForms.Properties.Resources.close;
+            this.buttonClose.Image = ((System.Drawing.Image)(resources.GetObject("buttonClose.Image")));
             this.buttonClose.Location = new System.Drawing.Point(814, 0);
             this.buttonClose.Name = "buttonClose";
             this.buttonClose.Size = new System.Drawing.Size(35, 31);
@@ -306,24 +306,24 @@ namespace MusicProjectForms
             // 
             this.dataGridViewDetails.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(34)))), ((int)(((byte)(34)))));
             this.dataGridViewDetails.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Verdana", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(34)))), ((int)(((byte)(34)))));
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridViewDetails.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Verdana", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(34)))), ((int)(((byte)(34)))));
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewDetails.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.dataGridViewDetails.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewDetails.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewDetails.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(34)))), ((int)(((byte)(34)))));
             this.dataGridViewDetails.Location = new System.Drawing.Point(10, 10);
             this.dataGridViewDetails.Name = "dataGridViewDetails";
             this.dataGridViewDetails.RowHeadersVisible = false;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(34)))), ((int)(((byte)(34)))));
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.White;
-            this.dataGridViewDetails.RowsDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(34)))), ((int)(((byte)(34)))));
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.Color.White;
+            this.dataGridViewDetails.RowsDefaultCellStyle = dataGridViewCellStyle4;
             this.dataGridViewDetails.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Verdana", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.dataGridViewDetails.RowTemplate.Height = 25;
             this.dataGridViewDetails.Size = new System.Drawing.Size(829, 190);
@@ -371,6 +371,7 @@ namespace MusicProjectForms
             this.panelAudioControls.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
             this.panelAudioControls.Size = new System.Drawing.Size(408, 26);
             this.panelAudioControls.TabIndex = 10;
+            this.panelAudioControls.Visible = false;
             // 
             // buttonSkip
             // 
@@ -379,7 +380,7 @@ namespace MusicProjectForms
             this.buttonSkip.Dock = System.Windows.Forms.DockStyle.Left;
             this.buttonSkip.FlatAppearance.BorderSize = 0;
             this.buttonSkip.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonSkip.Image = global::MusicProjectForms.Properties.Resources.next;
+            this.buttonSkip.Image = ((System.Drawing.Image)(resources.GetObject("buttonSkip.Image")));
             this.buttonSkip.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.buttonSkip.Location = new System.Drawing.Point(225, 0);
             this.buttonSkip.Name = "buttonSkip";
@@ -396,7 +397,7 @@ namespace MusicProjectForms
             this.buttonStop.Dock = System.Windows.Forms.DockStyle.Left;
             this.buttonStop.FlatAppearance.BorderSize = 0;
             this.buttonStop.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonStop.Image = global::MusicProjectForms.Properties.Resources.pause;
+            this.buttonStop.Image = ((System.Drawing.Image)(resources.GetObject("buttonStop.Image")));
             this.buttonStop.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.buttonStop.Location = new System.Drawing.Point(190, 0);
             this.buttonStop.Name = "buttonStop";
@@ -413,7 +414,7 @@ namespace MusicProjectForms
             this.buttonPlay.Dock = System.Windows.Forms.DockStyle.Left;
             this.buttonPlay.FlatAppearance.BorderSize = 0;
             this.buttonPlay.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonPlay.Image = global::MusicProjectForms.Properties.Resources.play;
+            this.buttonPlay.Image = ((System.Drawing.Image)(resources.GetObject("buttonPlay.Image")));
             this.buttonPlay.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.buttonPlay.Location = new System.Drawing.Point(155, 0);
             this.buttonPlay.Name = "buttonPlay";
@@ -430,7 +431,7 @@ namespace MusicProjectForms
             this.buttonLeft.Dock = System.Windows.Forms.DockStyle.Left;
             this.buttonLeft.FlatAppearance.BorderSize = 0;
             this.buttonLeft.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonLeft.Image = global::MusicProjectForms.Properties.Resources.rewind;
+            this.buttonLeft.Image = ((System.Drawing.Image)(resources.GetObject("buttonLeft.Image")));
             this.buttonLeft.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.buttonLeft.Location = new System.Drawing.Point(120, 0);
             this.buttonLeft.Name = "buttonLeft";
